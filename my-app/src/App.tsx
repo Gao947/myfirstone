@@ -8,7 +8,8 @@ import ShoppingCart from "./components/ShoppingCart";
 interface Props {}
 
 interface State {
-  robotGallery: any
+  robotGallery: any[];
+  count: number;
 }
 
 class App extends React.Component<Props, State> {
@@ -16,6 +17,7 @@ class App extends React.Component<Props, State> {
     super(props);
     this.state = {
       robotGallery: [],
+      count: 0
     };
   }
 
@@ -32,6 +34,16 @@ componentDidMount() {
           <img src={logo} className={styles.appLogo} alt="logo" />
           <h1>Robot Online Shop</h1>
         </div>
+        <button 
+        onClick={()=> {
+          this.setState((preState, preProps) => {count: this.state.count+1}, () => {
+            console.log("count", this.state.count);
+          });
+        }}
+      >
+        Click
+        </button>
+        <span>count: {this.state.count}</span>
         <ShoppingCart />
         <div className={styles.robotList}>
           {this.state.robotGallery.map((r) => (
