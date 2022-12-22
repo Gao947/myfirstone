@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import logo from "./assets/images/logo.svg";
 import robots from "./mockdata/robots.json";
 import Robot from "./components/Robot";
@@ -12,47 +12,63 @@ interface State {
   count: number;
 }
 
-class App extends React.Component<Props, State> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      robotGallery: [],
-      count: 0
+const App = () => {
+  const [count, setCount] = useState<number>(0)
+  const [robotGallery, setRobotGallery] = useState<any>([])
+  const [loading, setLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string>()
+
+  useEffect(()=>{
+    document.title = `COUNT${count}`
+  }, [count])
+
+  useEffect(()=>{
+    const fetchData = async () => {
+      setLoading(true)
+      try {
+      const responses = await fetch(
+        "https://jsonplaceholder.typicode.com/users"
+        );
+      //.then(response => response.json())
+      //.then(data => setRobotGallery(data))
+      const data = await responses.json();
+      setRobotGallery(data);
+      } catch(e:any) {
+        setError(e.message)
+      }
+      setLoading(false)
     };
-  }
 
-componentDidMount() {
-  fetch("https://jsonplaceholder.typicode.com/users")
-  .then(response => response.json())
-  .then(data => this.setState({ robotGallery: data }));
-}
+    fetchData()
+  }, []);
 
-  render() {
     return (
       <div className={styles.app}>
         <div className={styles.appHeader}>
           <img src={logo} className={styles.appLogo} alt="logo" />
-          <h1>Robot Online Shop</h1>
+          <h1>Robot Online Gallery</h1>
         </div>
         <button 
         onClick={()=> {
-          this.setState((preState, preProps) => {count: this.state.count+1}, () => {
-            console.log("count", this.state.count);
-          });
+          setCount(count + 1)
         }}
       >
         Click
         </button>
-        <span>count: {this.state.count}</span>
+        <span>count: {count}</span>
         <ShoppingCart />
+        {!error || error!=="" && <div>WEB ERROR: {error}</div>}
+        { !loading ? (
         <div className={styles.robotList}>
-          {this.state.robotGallery.map((r) => (
+          {robotGallery.map((r) => (
             <Robot id={r.id} email={r.email} name={r.name} />
           ))}
         </div>
+       ) : (<h2>loading</h2>
+        )}
       </div>
     );
-  }
-}
+  };
+
 
 export default App;
