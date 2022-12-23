@@ -12,10 +12,10 @@ interface State {
   count: number;
 }
 
-const App = () => {
-  const [count, setCount] = useState<number>(0)
-  const [robotGallery, setRobotGallery] = useState<any>([])
-  const [loading, setLoading] = useState<boolean>(false)
+const App: React.FC<Props> = (props) => {
+  const [count, setCount] = useState<number>(0);
+  const [robotGallery, setRobotGallery] = useState<any>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>()
 
   useEffect(()=>{
