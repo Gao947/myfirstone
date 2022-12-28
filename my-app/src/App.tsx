@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import logo from "./assets/images/logo.svg";
 import robots from "./mockdata/robots.json";
 import Robot from "./components/Robot";
+import RoboDiscount from "./components/RobotDiscount";
 import styles from "./App.module.css";
 import ShoppingCart from "./components/ShoppingCart";
+import RobotDiscount from "./components/RobotDiscount";
 
 interface Props {}
 
@@ -60,8 +62,12 @@ const App: React.FC<Props> = (props) => {
         {!error || error!=="" && <div>WEB ERROR: {error}</div>}
         { !loading ? (
         <div className={styles.robotList}>
-          {robotGallery.map((r) => (
+          {robotGallery.map((r, index) => (
+            index % 2 == 0 ? (
+              <RobotDiscount id={r.id} email={r.email} name={r.name} />
+            ) : (
             <Robot id={r.id} email={r.email} name={r.name} />
+            )
           ))}
         </div>
        ) : (<h2>loading</h2>
